@@ -35,6 +35,19 @@ create table if not exists public.contact_submissions (
 
 If you want to use the **service role key**, keep the table private (no need for RLS).
 
+Create a table `mealplanner_leads`:
+
+```sql
+create table if not exists public.mealplanner_leads (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz default now(),
+  email text not null,
+  goal text not null,
+  preferences jsonb,
+  consent boolean default true
+);
+```
+
 ## Deploy (Vercel)
 
 - Framework preset: Next.js

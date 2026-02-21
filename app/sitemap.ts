@@ -6,6 +6,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: "https://beinspiredbyus.be/mijn-verhaal", lastModified: new Date() },
     { url: "https://beinspiredbyus.be/aanbod", lastModified: new Date() },
     { url: "https://beinspiredbyus.be/transformaties", lastModified: new Date() },
+    { url: "https://beinspiredbyus.be/mealplanner", lastModified: new Date() },
     { url: "https://beinspiredbyus.be/contact", lastModified: new Date() },
     { url: "https://beinspiredbyus.be/challenge", lastModified: new Date() },
   ];

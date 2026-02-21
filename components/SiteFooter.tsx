@@ -20,6 +20,9 @@ export function SiteFooter() {
             <Link className="hover:text-black" href="/transformaties">
               Transformaties
             </Link>
+            <Link className="hover:text-black" href="/mealplanner">
+              Weekmenu
+            </Link>
             <Link className="hover:text-black" href="/contact">
               Contact
             </Link>

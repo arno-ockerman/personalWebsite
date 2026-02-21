@@ -10,6 +10,7 @@ const links = [
   { href: "/mijn-verhaal", label: "Mijn verhaal" },
   { href: "/aanbod", label: "Aanbod" },
   { href: "/transformaties", label: "Transformaties" },
+  { href: "/mealplanner", label: "Weekmenu" },
   { href: "/contact", label: "Contact" },
 ];
 
@@ -22,6 +23,7 @@ export function SiteHeader() {
     if (pathname.startsWith("/mijn-verhaal")) return "/mijn-verhaal";
     if (pathname.startsWith("/aanbod")) return "/aanbod";
     if (pathname.startsWith("/transformaties")) return "/transformaties";
+    if (pathname.startsWith("/mealplanner")) return "/mealplanner";
     if (pathname.startsWith("/contact")) return "/contact";
     return "/";
   }, [pathname]);
