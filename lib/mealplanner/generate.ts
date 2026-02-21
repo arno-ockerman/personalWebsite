@@ -169,17 +169,17 @@ export function generateMealPlan({
     const dinner = pickRecipe({ pool: shuffle(dinnerPool, rand), rand, recentIds: recentByType.dinner });
     pushRecent("dinner", dinner.id);
 
-    const meals = [
-      { type: "breakfast" as const, recipe: breakfast },
-      { type: "lunch" as const, recipe: lunch },
-      { type: "dinner" as const, recipe: dinner },
+    const meals: Array<{ type: MealType; recipe: Recipe }> = [
+      { type: "breakfast", recipe: breakfast },
+      { type: "lunch", recipe: lunch },
+      { type: "dinner", recipe: dinner },
     ];
 
     const snacksNeeded = mealsPerDay - 3;
     for (let i = 0; i < snacksNeeded; i++) {
       const snack = pickRecipe({ pool: shuffle(snackPool, rand), rand, recentIds: recentByType.snack });
       pushRecent("snack", snack.id);
-      meals.push({ type: "snack" as const, recipe: snack });
+      meals.push({ type: "snack", recipe: snack });
     }
 
     const macros = sumMacros(meals.map((m) => recipeMacros(m.recipe)));
