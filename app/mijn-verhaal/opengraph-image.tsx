@@ -6,7 +6,8 @@ export const contentType = "image/png";
 
 export default async function Image() {
   return createOgImage({
-    title: "Arno Ockerman",
-    subtitle: "Coaching • Voeding • Mindset — duidelijke stappen voor ambitieuze mannen.",
+    title: "Mijn verhaal",
+    subtitle: "Van -18kg naar een sterke routine — met discipline en slimme structuur.",
   });
 }
+
