@@ -8,6 +8,8 @@ import { Container } from "@/components/Container";
 const links = [
   { href: "/", label: "Home" },
   { href: "/mijn-verhaal", label: "Mijn verhaal" },
+  { href: "/aanbod", label: "Aanbod" },
+  { href: "/transformaties", label: "Transformaties" },
   { href: "/contact", label: "Contact" },
 ];
 
@@ -18,6 +20,8 @@ export function SiteHeader() {
   const activeHref = useMemo(() => {
     if (!pathname) return "/";
     if (pathname.startsWith("/mijn-verhaal")) return "/mijn-verhaal";
+    if (pathname.startsWith("/aanbod")) return "/aanbod";
+    if (pathname.startsWith("/transformaties")) return "/transformaties";
     if (pathname.startsWith("/contact")) return "/contact";
     return "/";
   }, [pathname]);

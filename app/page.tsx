@@ -2,6 +2,9 @@ import { Badge } from "@/components/Badge";
 import { Button } from "@/components/Button";
 import { Container } from "@/components/Container";
 import { SectionTitle } from "@/components/SectionTitle";
+import { TestimonialCard } from "@/components/TestimonialCard";
+import { TransformationCard } from "@/components/TransformationCard";
+import { InstagramFeed } from "@/components/InstagramFeed";
 
 export default function HomePage() {
   return (
@@ -129,34 +132,65 @@ export default function HomePage() {
               <SectionTitle
                 eyebrow="Social proof"
                 title={<span className="font-serif">Resultaat dat je kunt voelen.</span>}
-                subtitle="Korte quotes uit de community. (In Phase 2 vullen we dit aan met voor/na foto’s en video’s.)"
+                subtitle="Korte quotes uit de community — en voorbeelden van transformaties die tonen dat structuur werkt."
               />
+              <div className="mt-7 flex flex-col gap-3 sm:flex-row">
+                <Button href="/transformaties">Bekijk transformaties</Button>
+                <Button href="/aanbod" variant="secondary">
+                  Bekijk aanbod
+                </Button>
+              </div>
             </div>
             <div className="grid gap-4 lg:col-span-7 sm:grid-cols-3">
               {[
                 {
                   name: "Tom, 32",
+                  result: "-6 kg",
                   quote:
                     "Ik had eindelijk structuur. Geen crash-dieet, wel stappen die ik kon volhouden naast mijn job.",
                 },
                 {
                   name: "Yannick, 27",
+                  result: "meer energie",
                   quote: "3 weken later: meer energie, betere focus en ik bleef consistent trainen.",
                 },
                 {
                   name: "Kevin, 38",
+                  result: "routine",
                   quote: "Arno houdt het simpel. Dat was exact wat ik nodig had om weer vooruit te gaan.",
                 },
               ].map((t) => (
-                <figure key={t.name} className="rounded-3xl border border-black/5 bg-white p-6 shadow-soft">
-                  <blockquote className="text-sm leading-relaxed text-black/70">“{t.quote}”</blockquote>
-                  <figcaption className="mt-4 text-sm font-semibold text-black/80">{t.name}</figcaption>
-                </figure>
+                <TestimonialCard key={t.name} name={t.name} result={t.result} quote={t.quote} />
               ))}
             </div>
           </div>
         </Container>
       </section>
+
+      <section className="pb-14 sm:pb-18">
+        <Container>
+          <div className="grid gap-8 lg:grid-cols-12 lg:items-start">
+            <div className="lg:col-span-5">
+              <SectionTitle
+                eyebrow="Voor/na"
+                title={<span className="font-serif">Transformaties die spreken.</span>}
+                subtitle="Voorbeelden (in Phase 2 voegen we echte foto’s toe)."
+              />
+            </div>
+            <div className="grid gap-4 lg:col-span-7 sm:grid-cols-3">
+              {[
+                { name: "Tom", result: "-6 kg • meer energie" },
+                { name: "Yannick", result: "+kracht • strakkere look" },
+                { name: "Kevin", result: "-4 kg • routine terug" },
+              ].map((t) => (
+                <TransformationCard key={`${t.name}-${t.result}`} name={t.name} result={t.result} />
+              ))}
+            </div>
+          </div>
+        </Container>
+      </section>
+
+      <InstagramFeed />
 
       <section className="pb-16 sm:pb-20">
         <Container>

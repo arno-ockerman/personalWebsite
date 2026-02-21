@@ -14,6 +14,7 @@ export function Button({
   variant?: Variant;
   className?: string;
 }) {
+  const external = /^https?:\/\//.test(href);
   const base =
     "inline-flex items-center justify-center rounded-2xl px-5 py-3 text-sm font-semibold transition focus:outline-none focus:ring-2 focus:ring-brand-primary/30";
   const styles: Record<Variant, string> = {
@@ -23,10 +24,19 @@ export function Button({
     ghost: "text-brand-primary hover:bg-brand-primary/5",
   };
 
+  const classes = `${base} ${styles[variant]} ${className}`;
+
+  if (external) {
+    return (
+      <a href={href} className={classes} target="_blank" rel="noreferrer">
+        {children}
+      </a>
+    );
+  }
+
   return (
-    <Link href={href} className={`${base} ${styles[variant]} ${className}`}>
+    <Link href={href} className={classes}>
       {children}
     </Link>
   );
 }
-

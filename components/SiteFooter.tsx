@@ -14,10 +14,21 @@ export function SiteFooter() {
             <Link className="hover:text-black" href="/mijn-verhaal">
               Mijn verhaal
             </Link>
+            <Link className="hover:text-black" href="/aanbod">
+              Aanbod
+            </Link>
+            <Link className="hover:text-black" href="/transformaties">
+              Transformaties
+            </Link>
             <Link className="hover:text-black" href="/contact">
               Contact
             </Link>
-            <a className="hover:text-black" href="https://www.instagram.com/" target="_blank" rel="noreferrer">
+            <a
+              className="hover:text-black"
+              href="https://instagram.com/arnoockerman"
+              target="_blank"
+              rel="noreferrer"
+            >
               Instagram
             </a>
           </div>
@@ -26,4 +37,3 @@ export function SiteFooter() {
     </footer>
   );
 }
-

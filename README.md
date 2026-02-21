@@ -1,4 +1,4 @@
-# beinspiredbyus.be — Personal Website (Phase 1)
+# beinspiredbyus.be — Personal Website (Phase 1–3)
 
 Next.js 14 (App Router) + Tailwind + React Hook Form + Supabase contact submissions.
 
@@ -10,6 +10,7 @@ Next.js 14 (App Router) + Tailwind + React Hook Form + Supabase contact submissi
 2. Env vars
    - copy `.env.example` → `.env.local`
    - set `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY`
+   - optional: `INSTAGRAM_ACCESS_TOKEN` (Instagram Graph API) to show latest posts on the homepage
 3. Run
    - `npm run dev`
 
@@ -38,4 +39,5 @@ If you want to use the **service role key**, keep the table private (no need for
 
 - Framework preset: Next.js
 - Add env vars: `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`
+- Optional: `INSTAGRAM_ACCESS_TOKEN`
 - Deploy
