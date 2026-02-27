@@ -1,4 +1,14 @@
-import type { Allergy, Diet, Goal, Macros, MealPlan, MealType, Preferences, Recipe, ShoppingListItem } from "@/lib/mealplanner/types";
+import type {
+  Allergy,
+  Diet,
+  Goal,
+  Macros,
+  MealPlan,
+  MealType,
+  Preferences,
+  Recipe,
+  ShoppingListItem,
+} from "@/lib/mealplanner/types";
 import { recipes } from "@/lib/mealplanner/recipes";
 
 function clampInt(value: number, min: number, max: number) {
@@ -112,6 +122,26 @@ function buildShoppingList(plan: MealPlan): ShoppingListItem[] {
     .sort((a, b) => a.item.localeCompare(b.item, "nl"));
 }
 
+/**
+ * Pick which days of the week should feature a Herbalife recipe (1-2 per week).
+ * We pick 2 pseudo-random day indices out of 7.
+ */
+function pickHerbalifeSlots(rand: () => number): Set<number> {
+  const slots = new Set<number>();
+  // First slot — any day
+  const first = Math.floor(rand() * 7);
+  slots.add(first);
+  // Second slot — different from first, at least 2 days apart
+  for (let tries = 0; tries < 30; tries++) {
+    const second = Math.floor(rand() * 7);
+    if (second !== first && Math.abs(second - first) >= 2) {
+      slots.add(second);
+      break;
+    }
+  }
+  return slots;
+}
+
 export function generateMealPlan({
   goal,
   preferences,
@@ -133,11 +163,26 @@ export function generateMealPlan({
 
   const pool = filterRecipes({ goal, diet: normalizedPrefs.diet, allergies: normalizedPrefs.allergies });
   const byType = (type: MealType) => pool.filter((r) => r.mealType === type);
+  const byTypeHerbalife = (type: MealType) =>
+    pool.filter((r) => r.mealType === type && r.herbalife === true);
+  const byTypeRegular = (type: MealType) =>
+    pool.filter((r) => r.mealType === type && !r.herbalife);
 
   const breakfastPool = byType("breakfast");
   const lunchPool = byType("lunch");
   const dinnerPool = byType("dinner");
   const snackPool = byType("snack");
+
+  const breakfastHerbalife = byTypeHerbalife("breakfast");
+  const snackHerbalife = byTypeHerbalife("snack");
+  const lunchHerbalife = byTypeHerbalife("lunch");
+
+  const breakfastRegular = byTypeRegular("breakfast");
+  const lunchRegular = byTypeRegular("lunch");
+  const snackRegular = byTypeRegular("snack");
+
+  // Determine days where Herbalife gets featured (1-2 per week, naturally)
+  const herbalifeSlots = pickHerbalifeSlots(rand);
 
   const days: MealPlan["days"] = [];
   const dayKeys: MealPlan["days"][number]["day"][] = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
@@ -159,11 +204,32 @@ export function generateMealPlan({
     }
   };
 
-  for (const day of dayKeys) {
-    const breakfast = pickRecipe({ pool: shuffle(breakfastPool, rand), rand, recentIds: recentByType.breakfast });
+  for (let dayIdx = 0; dayIdx < dayKeys.length; dayIdx++) {
+    const day = dayKeys[dayIdx]!;
+    const isHerbalifeDay = herbalifeSlots.has(dayIdx);
+
+    // On Herbalife days: feature an HL breakfast or snack
+    let breakfastCandidates = breakfastPool;
+    if (isHerbalifeDay && breakfastHerbalife.length > 0) {
+      breakfastCandidates = breakfastHerbalife;
+    } else if (breakfastRegular.length > 0) {
+      breakfastCandidates = breakfastRegular;
+    }
+
+    const breakfast = pickRecipe({
+      pool: shuffle(breakfastCandidates, rand),
+      rand,
+      recentIds: recentByType.breakfast,
+    });
     pushRecent("breakfast", breakfast.id);
 
-    const lunch = pickRecipe({ pool: shuffle(lunchPool, rand), rand, recentIds: recentByType.lunch });
+    const lunchCandidates =
+      !isHerbalifeDay && lunchRegular.length > 0 ? lunchRegular : lunchPool;
+    const lunch = pickRecipe({
+      pool: shuffle(lunchCandidates, rand),
+      rand,
+      recentIds: recentByType.lunch,
+    });
     pushRecent("lunch", lunch.id);
 
     const dinner = pickRecipe({ pool: shuffle(dinnerPool, rand), rand, recentIds: recentByType.dinner });
@@ -177,7 +243,14 @@ export function generateMealPlan({
 
     const snacksNeeded = mealsPerDay - 3;
     for (let i = 0; i < snacksNeeded; i++) {
-      const snack = pickRecipe({ pool: shuffle(snackPool, rand), rand, recentIds: recentByType.snack });
+      // On Herbalife days: try to feature an HL snack for at least 1 slot
+      let snackCandidates = snackPool;
+      if (isHerbalifeDay && i === 0 && snackHerbalife.length > 0) {
+        snackCandidates = snackHerbalife;
+      } else if (snackRegular.length > 0) {
+        snackCandidates = snackRegular;
+      }
+      const snack = pickRecipe({ pool: shuffle(snackCandidates, rand), rand, recentIds: recentByType.snack });
       pushRecent("snack", snack.id);
       meals.push({ type: "snack", recipe: snack });
     }
@@ -200,4 +273,3 @@ export function generateMealPlan({
   plan.shoppingList = buildShoppingList(plan);
   return plan;
 }
-

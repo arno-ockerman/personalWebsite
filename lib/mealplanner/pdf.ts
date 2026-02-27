@@ -1,5 +1,7 @@
 import type { MealPlan, MealType } from "@/lib/mealplanner/types";
 
+// ─── Helpers ────────────────────────────────────────────────────────────────
+
 function toAscii(input: string) {
   return input
     .normalize("NFKD")
@@ -33,7 +35,6 @@ function wrapText(text: string, maxChars: number) {
 type PdfObject = { id: number; body: string };
 
 function buildPdf(objects: PdfObject[], rootId: number) {
-  // Keep ASCII-only to avoid encoding/xref offset issues with UTF-8.
   let out = "%PDF-1.4\n%\n";
 
   const offsets: number[] = [];
@@ -53,35 +54,38 @@ function buildPdf(objects: PdfObject[], rootId: number) {
   return Buffer.from(out, "utf8");
 }
 
+// ─── Labels ─────────────────────────────────────────────────────────────────
+
 function mealTypeLabel(t: MealType) {
   switch (t) {
-    case "breakfast":
-      return "Ontbijt";
-    case "lunch":
-      return "Lunch";
-    case "dinner":
-      return "Diner";
-    case "snack":
-      return "Snack";
+    case "breakfast": return "Ontbijt";
+    case "lunch":     return "Lunch";
+    case "dinner":    return "Diner";
+    case "snack":     return "Snack";
   }
 }
 
 function dayLabel(day: MealPlan["days"][number]["day"]) {
   switch (day) {
-    case "Mon":
-      return "Ma";
-    case "Tue":
-      return "Di";
-    case "Wed":
-      return "Wo";
-    case "Thu":
-      return "Do";
-    case "Fri":
-      return "Vr";
-    case "Sat":
-      return "Za";
-    case "Sun":
-      return "Zo";
+    case "Mon": return "Maandag";
+    case "Tue": return "Dinsdag";
+    case "Wed": return "Woensdag";
+    case "Thu": return "Donderdag";
+    case "Fri": return "Vrijdag";
+    case "Sat": return "Zaterdag";
+    case "Sun": return "Zondag";
+  }
+}
+
+function dayShort(day: MealPlan["days"][number]["day"]) {
+  switch (day) {
+    case "Mon": return "Ma";
+    case "Tue": return "Di";
+    case "Wed": return "Wo";
+    case "Thu": return "Do";
+    case "Fri": return "Vr";
+    case "Sat": return "Za";
+    case "Sun": return "Zo";
   }
 }
 
@@ -91,190 +95,409 @@ function goalLabel(goal: MealPlan["goal"]) {
   return "Onderhoud";
 }
 
+// ─── PDF Stream Builder ──────────────────────────────────────────────────────
+
+type Rgb = { r: number; g: number; b: number };
+
+function rgb(hex: string): Rgb {
+  const n = parseInt(hex.replace("#", ""), 16);
+  return { r: ((n >> 16) & 0xff) / 255, g: ((n >> 8) & 0xff) / 255, b: (n & 0xff) / 255 };
+}
+
+// Brand colours
+const BURGUNDY = rgb("#620E06");
+const GREEN    = rgb("#425C59");
+const AMBER    = rgb("#D5CBBA");
+const WHITE    = { r: 1, g: 1, b: 1 };
+const DARK     = { r: 0.12, g: 0.12, b: 0.12 };
+const MUTED    = { r: 0.45, g: 0.45, b: 0.45 };
+
+function setRgbFill(c: Rgb) {
+  return `${c.r.toFixed(3)} ${c.g.toFixed(3)} ${c.b.toFixed(3)} rg`;
+}
+
+function setRgbStroke(c: Rgb) {
+  return `${c.r.toFixed(3)} ${c.g.toFixed(3)} ${c.b.toFixed(3)} RG`;
+}
+
+function rect(x: number, y: number, w: number, h: number, fill: Rgb, stroke?: Rgb): string[] {
+  const ops: string[] = ["q"];
+  ops.push(setRgbFill(fill));
+  if (stroke) {
+    ops.push(setRgbStroke(stroke));
+    ops.push("0.5 w");
+    ops.push(`${x} ${y} ${w} ${h} re B`);
+  } else {
+    ops.push(`${x} ${y} ${w} ${h} re f`);
+  }
+  ops.push("Q");
+  return ops;
+}
+
+function text(
+  content: string,
+  x: number,
+  y: number,
+  size: number,
+  color: Rgb,
+  font: "/F1" | "/F2" = "/F1",
+): string[] {
+  return [
+    "BT",
+    `${font} ${size} Tf`,
+    setRgbFill(color),
+    `${x} ${y} Td`,
+    `(${escapePdfText(content)}) Tj`,
+    "ET",
+  ];
+}
+
+function hLine(x: number, y: number, w: number, color: Rgb, thickness = 0.5): string[] {
+  return [
+    "q",
+    setRgbStroke(color),
+    `${thickness} w`,
+    `${x} ${y} m ${x + w} ${y} l S`,
+    "Q",
+  ];
+}
+
+// ─── Main render ────────────────────────────────────────────────────────────
+
 export function renderMealPlanPdf(plan: MealPlan) {
-  const A4 = { w: 595.28, h: 841.89 };
-  const margin = 44;
+  const A4  = { w: 595.28, h: 841.89 };
+  const M   = 40;          // margin
+  const CW  = A4.w - M * 2; // content width
 
-  const brandPrimary = { r: 0x62 / 255, g: 0x0e / 255, b: 0x06 / 255 };
-  const brandAccent = { r: 0x42 / 255, g: 0x5c / 255, b: 0x59 / 255 };
+  const HEADER_H = 72;
+  const FOOTER_H = 32;
+  const CONTENT_BOT = M + FOOTER_H + 8;
 
-  const headerHeight = 64;
+  // ── Page factory ──────────────────────────────────────────────────────────
 
-  const page1: string[] = [];
-  page1.push("q");
-  page1.push(`${brandPrimary.r.toFixed(3)} ${brandPrimary.g.toFixed(3)} ${brandPrimary.b.toFixed(3)} rg`);
-  page1.push(`0 ${A4.h - headerHeight} ${A4.w} ${headerHeight} re f`);
-  page1.push("Q");
+  function makePage(
+    title: string,
+    subtitle: string,
+    bodyCb: (ops: string[], cursorY: { v: number }) => void,
+  ): string {
+    const ops: string[] = [];
 
-  page1.push("BT");
-  page1.push("/F1 22 Tf");
-  page1.push("1 1 1 rg");
-  page1.push(`${margin} ${A4.h - 42} Td`);
-  page1.push(`(${escapePdfText("Jouw persoonlijk weekmenu")}) Tj`);
-  page1.push("ET");
+    // Header background
+    ops.push(...rect(0, A4.h - HEADER_H, A4.w, HEADER_H, BURGUNDY));
 
-  page1.push("BT");
-  page1.push("/F1 11 Tf");
-  page1.push("1 1 1 rg");
-  page1.push(`${margin} ${A4.h - 60} Td`);
-  page1.push(
-    `(${escapePdfText(`Doel: ${goalLabel(plan.goal)} • ${new Date(plan.createdAt).toLocaleDateString("nl-BE")}`)}) Tj`,
-  );
-  page1.push("ET");
+    // Header accent bar (top 4px green)
+    ops.push(...rect(0, A4.h - 4, A4.w, 4, GREEN));
 
-  let cursorY = A4.h - headerHeight - 26;
-  const lineHeight = 14;
+    // Logo area — "Make It Happen" word-mark
+    ops.push(...text("MAKE IT HAPPEN", M, A4.h - 28, 16, WHITE, "/F2"));
+    ops.push(...text("by beinspiredbyus.be", M, A4.h - 44, 8, { r: 0.85, g: 0.7, b: 0.65 }));
 
-  page1.push("BT");
-  page1.push("/F1 11 Tf");
-  page1.push("0 0 0 rg");
-  page1.push(`${margin} ${cursorY} Td`);
-  page1.push(`(${escapePdfText("Overzicht (Ma-Zo)")}) Tj`);
-  page1.push("ET");
-  cursorY -= 14;
+    // Page title right-aligned-ish
+    ops.push(...text(title,    M, A4.h - 60, 11, WHITE));
+    ops.push(...text(subtitle, M, A4.h - 72 + 4, 8, { r: 0.85, g: 0.7, b: 0.65 }));
 
-  const maxLinesOnPage1 = 42;
-  let usedLines = 0;
+    // Amber separator
+    ops.push(...hLine(M, A4.h - HEADER_H - 6, CW, AMBER));
 
-  for (const day of plan.days) {
-    if (usedLines > maxLinesOnPage1) break;
+    // Body
+    const cursor = { v: A4.h - HEADER_H - 22 };
+    bodyCb(ops, cursor);
 
-    page1.push("BT");
-    page1.push("/F1 11 Tf");
-    page1.push(`${brandAccent.r.toFixed(3)} ${brandAccent.g.toFixed(3)} ${brandAccent.b.toFixed(3)} rg`);
-    page1.push(`${margin} ${cursorY} Td`);
-    page1.push(`(${escapePdfText(dayLabel(day.day))}) Tj`);
-    page1.push("ET");
+    // Footer background
+    ops.push(...rect(0, 0, A4.w, CONTENT_BOT - 8, AMBER));
 
-    const startX = margin + 30;
-    let rowY = cursorY;
-    for (const meal of day.meals) {
-      const label = `${mealTypeLabel(meal.type)}: ${meal.recipe.name}`;
-      const lines = wrapText(label, 62);
-      for (const line of lines) {
-        if (usedLines > maxLinesOnPage1) break;
-        page1.push("BT");
-        page1.push("/F1 10 Tf");
-        page1.push("0 0 0 rg");
-        page1.push(`${startX} ${rowY} Td`);
-        page1.push(`(${escapePdfText(line)}) Tj`);
-        page1.push("ET");
-        rowY -= lineHeight;
-        usedLines += 1;
+    // Footer text
+    ops.push(
+      ...text(
+        "Generated by beinspiredbyus.be  |  Powered by Herbalife Nutrition",
+        M,
+        12,
+        7.5,
+        GREEN,
+      ),
+    );
+    ops.push(
+      ...text(
+        `Plan ID: ${plan.id}  |  ${new Date(plan.createdAt).toLocaleDateString("nl-BE")}`,
+        A4.w - M - 160,
+        12,
+        7.5,
+        GREEN,
+      ),
+    );
+
+    return ops.join("\n") + "\n";
+  }
+
+  // ── Page 1: Cover / Overview ──────────────────────────────────────────────
+
+  const page1Content = makePage(
+    `Weekmenu - Doel: ${goalLabel(plan.goal)}`,
+    `${new Date(plan.createdAt).toLocaleDateString("nl-BE")}  |  ${plan.preferences.mealsPerDay} maaltijden/dag`,
+    (ops, cursor) => {
+      // Week macro summary box
+      const boxH = 50;
+      ops.push(...rect(M, cursor.v - boxH, CW, boxH, AMBER));
+
+      ops.push(...text("Week samenvatting", M + 10, cursor.v - 14, 9, GREEN, "/F2"));
+
+      const weekMacros = plan.weekMacros;
+      const avg = {
+        cal:   Math.round(weekMacros.calories / 7),
+        prot:  Math.round(weekMacros.protein / 7),
+        carbs: Math.round(weekMacros.carbs / 7),
+        fat:   Math.round(weekMacros.fat / 7),
+      };
+
+      const macroBoxW = CW / 4;
+      const macroItems = [
+        { label: "Gem. kcal/dag", val: `${avg.cal} kcal` },
+        { label: "Gem. eiwit/dag", val: `${avg.prot}g` },
+        { label: "Gem. koolh/dag", val: `${avg.carbs}g` },
+        { label: "Gem. vet/dag",   val: `${avg.fat}g` },
+      ];
+
+      macroItems.forEach((item, idx) => {
+        const bx = M + idx * macroBoxW;
+        ops.push(...text(item.val,   bx + 10, cursor.v - 32, 12, BURGUNDY, "/F2"));
+        ops.push(...text(item.label, bx + 10, cursor.v - 44, 7.5, MUTED));
+      });
+
+      cursor.v -= boxH + 16;
+
+      // Day-by-day overview table
+      for (const day of plan.days) {
+        if (cursor.v < CONTENT_BOT + 40) break;
+
+        // Day row header
+        ops.push(...rect(M, cursor.v - 16, CW, 16, GREEN));
+        ops.push(...text(dayLabel(day.day), M + 6, cursor.v - 11, 9, WHITE, "/F2"));
+
+        const dayMacroTxt = `${day.macros.calories} kcal  |  P ${day.macros.protein}g  |  C ${day.macros.carbs}g  |  F ${day.macros.fat}g`;
+        ops.push(...text(dayMacroTxt, M + 90, cursor.v - 11, 7.5, { r: 0.8, g: 0.9, b: 0.88 }));
+
+        cursor.v -= 16;
+
+        for (const meal of day.meals) {
+          if (cursor.v < CONTENT_BOT + 12) break;
+          const mealLine = `${mealTypeLabel(meal.type)}: ${meal.recipe.name}`;
+          const hlTag = meal.recipe.herbalife ? " [HL]" : "";
+          const lines = wrapText(mealLine + hlTag, 80);
+          for (const line of lines) {
+            if (cursor.v < CONTENT_BOT + 12) break;
+            ops.push(...text(line, M + 10, cursor.v - 10, 8.5, DARK));
+            cursor.v -= 12;
+          }
+          ops.push(
+            ...text(
+              `${meal.recipe.calories} kcal • P ${meal.recipe.protein}g • C ${meal.recipe.carbs}g • F ${meal.recipe.fat}g`,
+              M + 10,
+              cursor.v - 8,
+              7,
+              MUTED,
+            ),
+          );
+          cursor.v -= 11;
+        }
+
+        ops.push(...hLine(M, cursor.v - 3, CW, { r: 0.88, g: 0.88, b: 0.88 }));
+        cursor.v -= 8;
       }
-    }
-
-    cursorY = rowY - 6;
-    usedLines += 1;
-  }
-
-  const weekMacroText = `Week totaal: ${plan.weekMacros.calories} kcal | P ${plan.weekMacros.protein}g | C ${plan.weekMacros.carbs}g | F ${plan.weekMacros.fat}g`;
-  page1.push("BT");
-  page1.push("/F1 10 Tf");
-  page1.push("0 0 0 rg");
-  page1.push(`${margin} ${margin + 18} Td`);
-  page1.push(`(${escapePdfText(weekMacroText)}) Tj`);
-  page1.push("ET");
-
-  page1.push("BT");
-  page1.push("/F1 9 Tf");
-  page1.push("0 0 0 rg");
-  page1.push(`${margin} ${margin} Td`);
-  page1.push(
-    `(${escapePdfText("Tip: dit is een voorbeeldweek. Pas porties aan op je energieverbruik. - Be Inspired By Us")}) Tj`,
+    },
   );
-  page1.push("ET");
 
-  const page2: string[] = [];
-  page2.push("q");
-  page2.push(`${brandAccent.r.toFixed(3)} ${brandAccent.g.toFixed(3)} ${brandAccent.b.toFixed(3)} rg`);
-  page2.push(`0 ${A4.h - headerHeight} ${A4.w} ${headerHeight} re f`);
-  page2.push("Q");
+  // ── Page 2: Detailed Recipe Cards + Shopping List ─────────────────────────
 
-  page2.push("BT");
-  page2.push("/F1 22 Tf");
-  page2.push("1 1 1 rg");
-  page2.push(`${margin} ${A4.h - 42} Td`);
-  page2.push(`(${escapePdfText("Boodschappenlijst")}) Tj`);
-  page2.push("ET");
+  const page2Content = makePage(
+    "Recepten details",
+    "Ingrediënten per maaltijd",
+    (ops, cursor) => {
+      for (const day of plan.days) {
+        if (cursor.v < CONTENT_BOT + 60) break;
 
-  let listY = A4.h - headerHeight - 26;
-  page2.push("BT");
-  page2.push("/F1 10 Tf");
-  page2.push("0 0 0 rg");
-  page2.push(`${margin} ${listY} Td`);
-  page2.push(`(${escapePdfText("Geaggregeerd op basis van je weekmenu.")}) Tj`);
-  page2.push("ET");
-  listY -= 22;
+        // Day header
+        ops.push(...rect(M, cursor.v - 14, CW, 14, BURGUNDY));
+        ops.push(...text(dayShort(day.day) + "  " + dayLabel(day.day), M + 6, cursor.v - 10, 9, WHITE, "/F2"));
+        cursor.v -= 14;
 
-  const maxChars = 84;
-  for (const item of plan.shoppingList) {
-    const line = item.count > 1 ? `${item.item} (x${item.count})` : item.item;
-    const lines = wrapText(line, maxChars);
-    for (const l of lines) {
-      if (listY < margin + 18) break;
-      page2.push("BT");
-      page2.push("/F1 10 Tf");
-      page2.push("0 0 0 rg");
-      page2.push(`${margin} ${listY} Td`);
-      page2.push(`(${escapePdfText(`- ${l}`)}) Tj`);
-      page2.push("ET");
-      listY -= 13;
-    }
-    if (listY < margin + 18) break;
-  }
+        for (const meal of day.meals) {
+          if (cursor.v < CONTENT_BOT + 50) break;
 
-  page2.push("BT");
-  page2.push("/F1 9 Tf");
-  page2.push("0 0 0 rg");
-  page2.push(`${margin} ${margin} Td`);
-  page2.push(`(${escapePdfText("Klaar voor een plan op maat? Boek je gratis gesprek via beinspiredbyus.be/contact")}) Tj`);
-  page2.push("ET");
+          // Meal type badge
+          ops.push(...rect(M + 6, cursor.v - 12, 50, 12, meal.recipe.herbalife ? BURGUNDY : GREEN));
+          ops.push(...text(mealTypeLabel(meal.type), M + 8, cursor.v - 9, 7, WHITE));
 
-  const content1 = page1.join("\n") + "\n";
-  const content2 = page2.join("\n") + "\n";
+          // Herbalife badge
+          if (meal.recipe.herbalife && meal.recipe.herbalifeProd) {
+            ops.push(...rect(M + 60, cursor.v - 12, 90, 12, { r: 0.98, g: 0.92, b: 0.85 }));
+            ops.push(...text(`★ ${meal.recipe.herbalifeProd}`, M + 63, cursor.v - 9, 6.5, BURGUNDY));
+          }
+
+          cursor.v -= 14;
+
+          // Recipe name
+          ops.push(...text(meal.recipe.name, M + 6, cursor.v - 10, 9.5, DARK, "/F2"));
+          cursor.v -= 12;
+
+          // Macros inline
+          ops.push(
+            ...text(
+              `${meal.recipe.calories} kcal  •  Eiwit ${meal.recipe.protein}g  •  Koolh. ${meal.recipe.carbs}g  •  Vet ${meal.recipe.fat}g`,
+              M + 6,
+              cursor.v - 9,
+              7.5,
+              GREEN,
+            ),
+          );
+          cursor.v -= 12;
+
+          // Ingredients
+          for (const ing of meal.recipe.ingredients) {
+            if (cursor.v < CONTENT_BOT + 12) break;
+            ops.push(...text(`• ${ing}`, M + 14, cursor.v - 8, 7.5, MUTED));
+            cursor.v -= 10;
+          }
+
+          cursor.v -= 5;
+          ops.push(...hLine(M + 6, cursor.v, CW - 12, AMBER, 0.3));
+          cursor.v -= 6;
+        }
+
+        cursor.v -= 8;
+      }
+    },
+  );
+
+  // ── Page 3: Shopping List ─────────────────────────────────────────────────
+
+  const page3Content = makePage(
+    "Boodschappenlijst",
+    "Alle ingrediënten voor de week, gesorteerd",
+    (ops, cursor) => {
+      // Grouped shopping list — two columns
+      const colW = (CW - 10) / 2;
+      const left  = M;
+      const right = M + colW + 10;
+
+      let col = 0;
+      let leftY  = cursor.v;
+      let rightY = cursor.v;
+
+      ops.push(
+        ...text(
+          "Tip: vink af terwijl je winkelt. Herbalife producten bestel je via je coach.",
+          M,
+          cursor.v - 10,
+          7.5,
+          MUTED,
+        ),
+      );
+      cursor.v -= 20;
+      leftY  = cursor.v;
+      rightY = cursor.v;
+
+      for (const item of plan.shoppingList) {
+        const label = item.count > 1 ? `${item.item} (x${item.count})` : item.item;
+        const curX = col === 0 ? left : right;
+        const curY = col === 0 ? leftY : rightY;
+
+        if (curY < CONTENT_BOT + 14) break;
+
+        // Highlight Herbalife products
+        const isHL = label.toLowerCase().includes("formula 1") ||
+          label.toLowerCase().includes("herbal tea") ||
+          label.toLowerCase().includes("aloe vera") ||
+          label.toLowerCase().includes("protein bar") ||
+          label.toLowerCase().includes("protein drink mix");
+
+        ops.push(
+          ...text(
+            `${isHL ? "★ " : "• "}${label}`,
+            curX + 4,
+            curY - 9,
+            8,
+            isHL ? BURGUNDY : DARK,
+          ),
+        );
+
+        if (col === 0) {
+          leftY -= 13;
+          col = 1;
+        } else {
+          rightY -= 13;
+          col = 0;
+        }
+      }
+
+      // Herbalife promo note
+      const noteY = Math.min(leftY, rightY) - 20;
+      if (noteY > CONTENT_BOT + 30) {
+        ops.push(...rect(M, noteY - 28, CW, 28, { r: 0.98, g: 0.94, b: 0.91 }));
+        ops.push(
+          ...text(
+            "Herbalife producten (★) bestel je eenvoudig via beinspiredbyus.be/contact",
+            M + 8,
+            noteY - 14,
+            8,
+            BURGUNDY,
+            "/F2",
+          ),
+        );
+        ops.push(
+          ...text(
+            "Gratis persoonlijk advies? Boek een gratis gesprek via de website.",
+            M + 8,
+            noteY - 24,
+            7.5,
+            GREEN,
+          ),
+        );
+      }
+    },
+  );
+
+  // ── Assemble PDF objects ───────────────────────────────────────────────────
 
   const objects: PdfObject[] = [];
   let id = 1;
 
-  const catalogId = id++;
-  const pagesId = id++;
-  const fontId = id++;
-  const page1Id = id++;
-  const page2Id = id++;
-  const content1Id = id++;
-  const content2Id = id++;
+  const catalogId   = id++;
+  const pagesId     = id++;
+  const fontRegId   = id++;
+  const fontBoldId  = id++;
+  const page1Id     = id++;
+  const page2Id     = id++;
+  const page3Id     = id++;
+  const content1Id  = id++;
+  const content2Id  = id++;
+  const content3Id  = id++;
 
   objects.push({ id: catalogId, body: `<< /Type /Catalog /Pages ${pagesId} 0 R >>` });
   objects.push({
     id: pagesId,
-    body: `<< /Type /Pages /Kids [${page1Id} 0 R ${page2Id} 0 R] /Count 2 >>`,
+    body: `<< /Type /Pages /Kids [${page1Id} 0 R ${page2Id} 0 R ${page3Id} 0 R] /Count 3 >>`,
   });
-  objects.push({
-    id: fontId,
-    body: `<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>`,
-  });
-  objects.push({
-    id: page1Id,
-    body:
-      `<< /Type /Page /Parent ${pagesId} 0 R /MediaBox [0 0 ${A4.w} ${A4.h}] ` +
-      `/Resources << /Font << /F1 ${fontId} 0 R >> >> /Contents ${content1Id} 0 R >>`,
-  });
-  objects.push({
-    id: page2Id,
-    body:
-      `<< /Type /Page /Parent ${pagesId} 0 R /MediaBox [0 0 ${A4.w} ${A4.h}] ` +
-      `/Resources << /Font << /F1 ${fontId} 0 R >> >> /Contents ${content2Id} 0 R >>`,
-  });
+  objects.push({ id: fontRegId,  body: `<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>` });
+  objects.push({ id: fontBoldId, body: `<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>` });
 
-  objects.push({
-    id: content1Id,
-    body: `<< /Length ${Buffer.byteLength(content1, "utf8")} >>\nstream\n${content1}endstream`,
-  });
-  objects.push({
-    id: content2Id,
-    body: `<< /Length ${Buffer.byteLength(content2, "utf8")} >>\nstream\n${content2}endstream`,
-  });
+  const fontResources = `/Font << /F1 ${fontRegId} 0 R /F2 ${fontBoldId} 0 R >>`;
+
+  for (const [pgId, contId, content] of [
+    [page1Id, content1Id, page1Content],
+    [page2Id, content2Id, page2Content],
+    [page3Id, content3Id, page3Content],
+  ] as [number, number, string][]) {
+    objects.push({
+      id: pgId,
+      body:
+        `<< /Type /Page /Parent ${pagesId} 0 R /MediaBox [0 0 ${A4.w} ${A4.h}] ` +
+        `/Resources << ${fontResources} >> /Contents ${contId} 0 R >>`,
+    });
+    objects.push({
+      id: contId,
+      body: `<< /Length ${Buffer.byteLength(content, "utf8")} >>\nstream\n${content}endstream`,
+    });
+  }
 
   return buildPdf(objects, catalogId);
 }

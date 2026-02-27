@@ -37,6 +37,12 @@ export type Recipe = {
   suitable_for: Goal[];
   tags: RecipeTag[];
   allergens: Allergy[];
+  /** Whether this recipe features a Herbalife product */
+  herbalife?: boolean;
+  /** Herbalife product name shown in badge */
+  herbalifeProd?: string;
+  /** Unsplash keyword for food image */
+  imageKeyword?: string;
 };
 
 export type Preferences = {
@@ -71,3 +77,13 @@ export type MealPlan = {
   shoppingList: ShoppingListItem[];
 };
 
+/** Extended lead data captured in the subscribe form */
+export type LeadData = {
+  email: string;
+  phone?: string;
+  goal: Goal;
+  preferences: Preferences;
+  consent: boolean;
+  wantCoaching?: boolean;
+  planId?: string;
+};
