@@ -1,7 +1,9 @@
 import type { Recipe } from "@/lib/mealplanner/types";
 
 export const recipes: Recipe[] = [
-  // Breakfast (7)
+  // ─────────────────────────────────────────
+  // BREAKFAST (regular)
+  // ─────────────────────────────────────────
   {
     id: "b-overnight-oats-berry",
     mealType: "breakfast",
@@ -14,6 +16,7 @@ export const recipes: Recipe[] = [
     suitable_for: ["weight_loss", "muscle", "maintenance"],
     tags: ["vegetarian", "high_protein"],
     allergens: ["gluten", "soy"],
+    imageKeyword: "overnight-oats-berries",
   },
   {
     id: "b-greek-yogurt-granola",
@@ -27,6 +30,7 @@ export const recipes: Recipe[] = [
     suitable_for: ["weight_loss", "muscle", "maintenance"],
     tags: ["vegetarian", "high_protein"],
     allergens: ["lactose", "gluten"],
+    imageKeyword: "greek-yogurt-granola",
   },
   {
     id: "b-eggs-toast-avocado",
@@ -40,6 +44,7 @@ export const recipes: Recipe[] = [
     suitable_for: ["muscle", "maintenance"],
     tags: ["vegetarian", "high_protein"],
     allergens: ["egg", "gluten"],
+    imageKeyword: "scrambled-eggs-avocado-toast",
   },
   {
     id: "b-protein-smoothie",
@@ -53,6 +58,7 @@ export const recipes: Recipe[] = [
     suitable_for: ["muscle", "maintenance"],
     tags: ["vegetarian", "high_protein"],
     allergens: ["nuts", "soy", "lactose"],
+    imageKeyword: "protein-smoothie-banana",
   },
   {
     id: "b-cottage-cheese-fruit",
@@ -66,6 +72,7 @@ export const recipes: Recipe[] = [
     suitable_for: ["weight_loss", "muscle", "maintenance"],
     tags: ["vegetarian", "high_protein"],
     allergens: ["lactose", "nuts"],
+    imageKeyword: "cottage-cheese-fruit",
   },
   {
     id: "b-vegan-tofu-scramble",
@@ -79,6 +86,7 @@ export const recipes: Recipe[] = [
     suitable_for: ["weight_loss", "muscle", "maintenance"],
     tags: ["vegan", "vegetarian", "high_protein", "gluten_free", "lactose_free"],
     allergens: ["soy"],
+    imageKeyword: "tofu-scramble-vegetables",
   },
   {
     id: "b-rice-cakes-quark",
@@ -92,9 +100,101 @@ export const recipes: Recipe[] = [
     suitable_for: ["weight_loss", "muscle", "maintenance"],
     tags: ["vegetarian", "high_protein", "gluten_free"],
     allergens: ["lactose"],
+    imageKeyword: "rice-cakes-strawberry",
   },
 
-  // Lunch (9)
+  // ─────────────────────────────────────────
+  // BREAKFAST (Herbalife)
+  // ─────────────────────────────────────────
+  {
+    id: "b-f1-shake-chocolate",
+    mealType: "breakfast",
+    name: "Formula 1 Chocolade Shake",
+    calories: 220,
+    protein: 21,
+    carbs: 28,
+    fat: 3,
+    ingredients: [
+      "2 scoops (52g) Formula 1 Chocolade",
+      "250ml halfvolle melk",
+      "1 banaan (optioneel)",
+      "ijsblokjes",
+    ],
+    suitable_for: ["weight_loss", "muscle", "maintenance"],
+    tags: ["vegetarian", "high_protein"],
+    allergens: ["lactose", "soy"],
+    herbalife: true,
+    herbalifeProd: "Formula 1 Chocolade",
+    imageKeyword: "chocolate-protein-shake",
+  },
+  {
+    id: "b-f1-shake-vanilla-berry",
+    mealType: "breakfast",
+    name: "Formula 1 Vanille-Bessen Shake",
+    calories: 240,
+    protein: 21,
+    carbs: 34,
+    fat: 3,
+    ingredients: [
+      "2 scoops (52g) Formula 1 Vanille",
+      "250ml (soja)melk",
+      "100g gemengde bessen",
+      "1 tl chiazaad",
+    ],
+    suitable_for: ["weight_loss", "muscle", "maintenance"],
+    tags: ["vegetarian", "high_protein"],
+    allergens: ["lactose", "soy"],
+    herbalife: true,
+    herbalifeProd: "Formula 1 Vanille",
+    imageKeyword: "vanilla-berry-smoothie",
+  },
+  {
+    id: "b-f1-shake-strawberry-banana",
+    mealType: "breakfast",
+    name: "Formula 1 Aardbei-Banaan Shake",
+    calories: 235,
+    protein: 21,
+    carbs: 32,
+    fat: 3,
+    ingredients: [
+      "2 scoops (52g) Formula 1 Aardbei",
+      "200ml amandelmelk",
+      "1 kleine banaan",
+      "ijsblokjes",
+    ],
+    suitable_for: ["weight_loss", "muscle", "maintenance"],
+    tags: ["vegetarian", "high_protein", "gluten_free"],
+    allergens: ["soy"],
+    herbalife: true,
+    herbalifeProd: "Formula 1 Aardbei",
+    imageKeyword: "strawberry-banana-smoothie",
+  },
+  {
+    id: "b-herbal-tea-morning",
+    mealType: "breakfast",
+    name: "Herbal Tea Concentrate als ochtendboost",
+    calories: 180,
+    protein: 18,
+    carbs: 22,
+    fat: 2,
+    ingredients: [
+      "1 tl (1,7g) Herbal Tea Concentrate Original",
+      "300ml warm water",
+      "2 rijstwafels",
+      "200g magere kwark",
+      "fruit naar keuze",
+    ],
+    suitable_for: ["weight_loss", "muscle", "maintenance"],
+    tags: ["vegetarian", "high_protein", "gluten_free"],
+    allergens: ["lactose"],
+    herbalife: true,
+    herbalifeProd: "Herbal Tea Concentrate",
+    imageKeyword: "herbal-tea-morning-healthy",
+  },
+
+  // ─────────────────────────────────────────
+  // LUNCH (regular)
+  // ─────────────────────────────────────────
   {
     id: "l-chicken-wrap",
     mealType: "lunch",
@@ -107,6 +207,7 @@ export const recipes: Recipe[] = [
     suitable_for: ["muscle", "maintenance"],
     tags: ["high_protein"],
     allergens: ["gluten", "lactose"],
+    imageKeyword: "chicken-wrap-vegetables",
   },
   {
     id: "l-tuna-salad-bowl",
@@ -120,6 +221,7 @@ export const recipes: Recipe[] = [
     suitable_for: ["weight_loss", "maintenance"],
     tags: ["gluten_free", "lactose_free", "high_protein"],
     allergens: ["fish"],
+    imageKeyword: "tuna-salad-bowl",
   },
   {
     id: "l-veggie-burrito-bowl",
@@ -133,6 +235,7 @@ export const recipes: Recipe[] = [
     suitable_for: ["weight_loss", "maintenance"],
     tags: ["vegan", "vegetarian", "gluten_free", "lactose_free"],
     allergens: [],
+    imageKeyword: "burrito-bowl-vegetables",
   },
   {
     id: "l-turkey-sandwich",
@@ -146,6 +249,7 @@ export const recipes: Recipe[] = [
     suitable_for: ["weight_loss", "muscle", "maintenance"],
     tags: ["high_protein"],
     allergens: ["gluten"],
+    imageKeyword: "turkey-sandwich-wholegrain",
   },
   {
     id: "l-salmon-quinoa",
@@ -159,6 +263,7 @@ export const recipes: Recipe[] = [
     suitable_for: ["muscle", "maintenance"],
     tags: ["gluten_free", "lactose_free", "high_protein"],
     allergens: ["fish"],
+    imageKeyword: "salmon-quinoa-bowl",
   },
   {
     id: "l-egg-salad",
@@ -172,6 +277,7 @@ export const recipes: Recipe[] = [
     suitable_for: ["maintenance"],
     tags: ["vegetarian", "high_protein"],
     allergens: ["egg", "gluten"],
+    imageKeyword: "egg-salad-crackers",
   },
   {
     id: "l-lentil-soup",
@@ -185,6 +291,7 @@ export const recipes: Recipe[] = [
     suitable_for: ["weight_loss", "maintenance"],
     tags: ["vegan", "vegetarian"],
     allergens: ["gluten"],
+    imageKeyword: "lentil-soup-bowl",
   },
   {
     id: "l-chicken-rice-salad",
@@ -198,6 +305,7 @@ export const recipes: Recipe[] = [
     suitable_for: ["muscle", "maintenance"],
     tags: ["gluten_free", "lactose_free", "high_protein"],
     allergens: [],
+    imageKeyword: "chicken-rice-salad",
   },
   {
     id: "l-vegan-chickpea-salad",
@@ -211,9 +319,59 @@ export const recipes: Recipe[] = [
     suitable_for: ["maintenance"],
     tags: ["vegan", "vegetarian", "gluten_free", "lactose_free"],
     allergens: [],
+    imageKeyword: "chickpea-avocado-salad",
   },
 
-  // Dinner (9)
+  // ─────────────────────────────────────────
+  // LUNCH (Herbalife)
+  // ─────────────────────────────────────────
+  {
+    id: "l-f1-shake-lunch-cookies",
+    mealType: "lunch",
+    name: "Formula 1 Cookies & Cream Shake + salade",
+    calories: 480,
+    protein: 32,
+    carbs: 44,
+    fat: 10,
+    ingredients: [
+      "2 scoops (52g) Formula 1 Cookies & Cream",
+      "250ml (soja)melk",
+      "grote gemengde salade",
+      "1 el olijfolie & citroen",
+    ],
+    suitable_for: ["weight_loss", "muscle", "maintenance"],
+    tags: ["vegetarian", "high_protein"],
+    allergens: ["lactose", "soy", "gluten"],
+    herbalife: true,
+    herbalifeProd: "Formula 1 Cookies & Cream",
+    imageKeyword: "cookies-cream-protein-shake",
+  },
+  {
+    id: "l-aloe-lunch-bowl",
+    mealType: "lunch",
+    name: "Aloe Vera Drink + Kip & Quinoa bowl",
+    calories: 560,
+    protein: 42,
+    carbs: 52,
+    fat: 14,
+    ingredients: [
+      "15ml Aloe Vera Concentrate",
+      "500ml water (aangelengd)",
+      "180g kipfilet",
+      "100g quinoa",
+      "gemengde groenten",
+    ],
+    suitable_for: ["weight_loss", "muscle", "maintenance"],
+    tags: ["gluten_free", "lactose_free", "high_protein"],
+    allergens: [],
+    herbalife: true,
+    herbalifeProd: "Aloe Vera Concentrate",
+    imageKeyword: "aloe-vera-drink-chicken-bowl",
+  },
+
+  // ─────────────────────────────────────────
+  // DINNER (regular)
+  // ─────────────────────────────────────────
   {
     id: "d-steak-veggies",
     mealType: "dinner",
@@ -226,6 +384,7 @@ export const recipes: Recipe[] = [
     suitable_for: ["muscle", "maintenance"],
     tags: ["gluten_free", "lactose_free", "high_protein"],
     allergens: [],
+    imageKeyword: "grilled-steak-green-vegetables",
   },
   {
     id: "d-chicken-stir-fry",
@@ -239,6 +398,7 @@ export const recipes: Recipe[] = [
     suitable_for: ["weight_loss", "muscle", "maintenance"],
     tags: ["high_protein", "lactose_free"],
     allergens: ["soy"],
+    imageKeyword: "chicken-stir-fry-vegetables",
   },
   {
     id: "d-salmon-asparagus",
@@ -252,6 +412,7 @@ export const recipes: Recipe[] = [
     suitable_for: ["weight_loss", "maintenance"],
     tags: ["gluten_free", "lactose_free", "high_protein"],
     allergens: ["fish"],
+    imageKeyword: "grilled-salmon-asparagus",
   },
   {
     id: "d-turkey-chili",
@@ -265,6 +426,7 @@ export const recipes: Recipe[] = [
     suitable_for: ["weight_loss", "muscle", "maintenance"],
     tags: ["gluten_free", "lactose_free", "high_protein"],
     allergens: [],
+    imageKeyword: "turkey-chili-healthy",
   },
   {
     id: "d-tofu-curry",
@@ -278,6 +440,7 @@ export const recipes: Recipe[] = [
     suitable_for: ["weight_loss", "maintenance"],
     tags: ["vegan", "vegetarian", "gluten_free", "lactose_free"],
     allergens: ["soy"],
+    imageKeyword: "tofu-curry-cauliflower-rice",
   },
   {
     id: "d-omelet-veggies",
@@ -291,6 +454,7 @@ export const recipes: Recipe[] = [
     suitable_for: ["weight_loss", "maintenance"],
     tags: ["vegetarian", "gluten_free", "high_protein"],
     allergens: ["egg"],
+    imageKeyword: "vegetable-omelet",
   },
   {
     id: "d-cod-zoodles",
@@ -304,6 +468,7 @@ export const recipes: Recipe[] = [
     suitable_for: ["weight_loss", "maintenance"],
     tags: ["gluten_free", "lactose_free", "high_protein"],
     allergens: ["fish"],
+    imageKeyword: "cod-zucchini-noodles",
   },
   {
     id: "d-chicken-salad",
@@ -317,6 +482,7 @@ export const recipes: Recipe[] = [
     suitable_for: ["weight_loss", "muscle", "maintenance"],
     tags: ["gluten_free", "lactose_free", "high_protein"],
     allergens: [],
+    imageKeyword: "grilled-chicken-salad",
   },
   {
     id: "d-vegan-beans-veggies",
@@ -330,9 +496,12 @@ export const recipes: Recipe[] = [
     suitable_for: ["weight_loss", "maintenance"],
     tags: ["vegan", "vegetarian", "gluten_free", "lactose_free"],
     allergens: [],
+    imageKeyword: "black-bean-vegetable-bowl",
   },
 
-  // Snacks (6)
+  // ─────────────────────────────────────────
+  // SNACKS (regular)
+  // ─────────────────────────────────────────
   {
     id: "s-protein-pudding",
     mealType: "snack",
@@ -345,6 +514,7 @@ export const recipes: Recipe[] = [
     suitable_for: ["weight_loss", "muscle", "maintenance"],
     tags: ["vegetarian", "high_protein", "gluten_free"],
     allergens: ["lactose"],
+    imageKeyword: "protein-pudding",
   },
   {
     id: "s-apple-peanutbutter",
@@ -358,6 +528,7 @@ export const recipes: Recipe[] = [
     suitable_for: ["maintenance", "muscle"],
     tags: ["vegan", "vegetarian", "gluten_free", "lactose_free"],
     allergens: ["nuts"],
+    imageKeyword: "apple-peanut-butter-snack",
   },
   {
     id: "s-skyr-berries",
@@ -371,6 +542,7 @@ export const recipes: Recipe[] = [
     suitable_for: ["weight_loss", "muscle", "maintenance"],
     tags: ["vegetarian", "high_protein", "gluten_free"],
     allergens: ["lactose"],
+    imageKeyword: "skyr-berries-yogurt",
   },
   {
     id: "s-carrots-hummus",
@@ -384,6 +556,7 @@ export const recipes: Recipe[] = [
     suitable_for: ["weight_loss", "maintenance"],
     tags: ["vegan", "vegetarian", "gluten_free", "lactose_free"],
     allergens: ["soy"],
+    imageKeyword: "carrots-hummus-snack",
   },
   {
     id: "s-rice-cakes-turkey",
@@ -397,6 +570,7 @@ export const recipes: Recipe[] = [
     suitable_for: ["weight_loss", "muscle", "maintenance"],
     tags: ["gluten_free", "lactose_free", "high_protein"],
     allergens: [],
+    imageKeyword: "rice-cakes-turkey-snack",
   },
   {
     id: "s-mixed-nuts",
@@ -410,6 +584,87 @@ export const recipes: Recipe[] = [
     suitable_for: ["maintenance", "muscle"],
     tags: ["vegan", "vegetarian", "gluten_free", "lactose_free"],
     allergens: ["nuts"],
+    imageKeyword: "mixed-nuts-healthy",
+  },
+
+  // ─────────────────────────────────────────
+  // SNACKS (Herbalife)
+  // ─────────────────────────────────────────
+  {
+    id: "s-herbalife-protein-bar",
+    mealType: "snack",
+    name: "Herbalife Protein Bar",
+    calories: 210,
+    protein: 21,
+    carbs: 22,
+    fat: 6,
+    ingredients: ["1 Herbalife Protein Bar (60g) — Chocolate Chip Cookie Dough"],
+    suitable_for: ["weight_loss", "muscle", "maintenance"],
+    tags: ["vegetarian", "high_protein"],
+    allergens: ["gluten", "soy", "nuts"],
+    herbalife: true,
+    herbalifeProd: "Protein Bar",
+    imageKeyword: "protein-bar-chocolate",
+  },
+  {
+    id: "s-herbal-tea-snack",
+    mealType: "snack",
+    name: "Herbal Tea + rijstwafels",
+    calories: 120,
+    protein: 3,
+    carbs: 22,
+    fat: 2,
+    ingredients: [
+      "1 tl (1,7g) Herbal Tea Concentrate",
+      "300ml warm water",
+      "2 rijstwafels",
+    ],
+    suitable_for: ["weight_loss", "muscle", "maintenance"],
+    tags: ["vegan", "vegetarian", "gluten_free", "lactose_free"],
+    allergens: [],
+    herbalife: true,
+    herbalifeProd: "Herbal Tea Concentrate",
+    imageKeyword: "herbal-tea-rice-cakes",
+  },
+  {
+    id: "s-aloe-vera-drink",
+    mealType: "snack",
+    name: "Aloe Vera Detox Drink",
+    calories: 80,
+    protein: 5,
+    carbs: 10,
+    fat: 1,
+    ingredients: [
+      "15ml Aloe Vera Concentrate",
+      "400ml water",
+      "citroensap (naar smaak)",
+      "evt. 1 tl honing",
+    ],
+    suitable_for: ["weight_loss", "muscle", "maintenance"],
+    tags: ["vegan", "vegetarian", "gluten_free", "lactose_free"],
+    allergens: [],
+    herbalife: true,
+    herbalifeProd: "Aloe Vera Concentrate",
+    imageKeyword: "aloe-vera-detox-drink",
+  },
+  {
+    id: "s-pdm-shake-snack",
+    mealType: "snack",
+    name: "Protein Drink Mix snack shake",
+    calories: 180,
+    protein: 22,
+    carbs: 14,
+    fat: 3,
+    ingredients: [
+      "28g Protein Drink Mix Vanille",
+      "200ml water of magere melk",
+      "enkele ijsblokjes",
+    ],
+    suitable_for: ["weight_loss", "muscle", "maintenance"],
+    tags: ["vegetarian", "high_protein", "gluten_free"],
+    allergens: ["lactose", "soy"],
+    herbalife: true,
+    herbalifeProd: "Protein Drink Mix",
+    imageKeyword: "vanilla-protein-shake",
   },
 ];
-
