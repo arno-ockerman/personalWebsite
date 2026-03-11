@@ -11,6 +11,7 @@ const links = [
   { href: "/aanbod", label: "Aanbod" },
   { href: "/transformaties", label: "Transformaties" },
   { href: "/mealplanner", label: "Weekmenu" },
+  { href: "/macros", label: "Macros" },
   { href: "/contact", label: "Contact" },
 ];
 
@@ -24,6 +25,7 @@ export function SiteHeader() {
     if (pathname.startsWith("/aanbod")) return "/aanbod";
     if (pathname.startsWith("/transformaties")) return "/transformaties";
     if (pathname.startsWith("/mealplanner")) return "/mealplanner";
+    if (pathname.startsWith("/macros")) return "/macros";
     if (pathname.startsWith("/contact")) return "/contact";
     return "/";
   }, [pathname]);
