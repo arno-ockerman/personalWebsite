@@ -3,8 +3,18 @@ import { Container } from "@/components/Container";
 import { ContactForm } from "@/components/contact/ContactForm";
 
 export const metadata: Metadata = {
-  title: "Contact",
-  description: "Neem contact op met Arno. Vertel waar je hulp bij nodig hebt en krijg snel een concreet antwoord.",
+  title: "Contact | Gratis Intake Fitness Coach België",
+  description:
+    "Neem contact op voor een gratis intake. Ontdek hoe Arno je helpt met afvallen, spiermassa opbouwen of een gezondere levensstijl.",
+  alternates: {
+    canonical: "https://arnoockerman.vercel.app/contact",
+  },
+  openGraph: {
+    title: "Contact | Gratis Intake Fitness Coach België",
+    description:
+      "Neem contact op voor een gratis intake. Ontdek hoe Arno je helpt met afvallen, spiermassa opbouwen of een gezondere levensstijl.",
+    url: "https://arnoockerman.vercel.app/contact",
+  },
 };
 
 export default function ContactPage() {

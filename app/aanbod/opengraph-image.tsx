@@ -7,7 +7,7 @@ export const contentType = "image/png";
 export default async function Image() {
   return createOgImage({
     title: "Aanbod",
-    subtitle: "1-op-1 coaching • 21-dagen challenge • Herbalife • Business.",
+    subtitle: "Lifestyle coaching • 21-dagen challenge • Supplementen • Business.",
   });
 }
 

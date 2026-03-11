@@ -37,10 +37,10 @@ export type Recipe = {
   suitable_for: Goal[];
   tags: RecipeTag[];
   allergens: Allergy[];
-  /** Whether this recipe features a Herbalife product */
-  herbalife?: boolean;
-  /** Herbalife product name shown in badge */
-  herbalifeProd?: string;
+  /** Whether this recipe features a premium protein product */
+  premium?: boolean;
+  /** Premium product name shown in badge */
+  premiumProduct?: string;
   /** Unsplash keyword for food image */
   imageKeyword?: string;
 };

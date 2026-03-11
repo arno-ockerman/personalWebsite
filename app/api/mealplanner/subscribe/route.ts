@@ -76,7 +76,7 @@ export async function POST(req: Request) {
     const preferences = { diet, mealsPerDay, allergies };
 
     // Build CRM tags
-    const tags: string[] = ["mealplanner-lead", "herbalife-interested"];
+    const tags: string[] = ["mealplanner-lead"];
     if (wantCoaching) tags.push("coaching-interested");
 
     // ── 1. Upsert mealplanner_leads ────────────────────────────────────────

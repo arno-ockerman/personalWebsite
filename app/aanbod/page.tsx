@@ -4,9 +4,18 @@ import { SectionTitle } from "@/components/SectionTitle";
 import { ServiceCard } from "@/components/ServiceCard";
 
 export const metadata: Metadata = {
-  title: "Aanbod",
+  title: "Coaching & Voeding Aanbod | Lifestyle Coaching Online België",
   description:
-    "Ontdek het aanbod van Arno Ockerman: 1-op-1 coaching, 21-dagen challenge, Herbalife producten en business opportunity.",
+    "Lifestyle coaching, 21-dagen challenge en voedingsbegeleiding. Afvallen, spiermassa opbouwen of meer energie? Start vandaag met Arno Ockerman.",
+  alternates: {
+    canonical: "https://arnoockerman.vercel.app/aanbod",
+  },
+  openGraph: {
+    title: "Coaching & Voeding Aanbod | Lifestyle Coaching Online België",
+    description:
+      "Lifestyle coaching, 21-dagen challenge en voedingsbegeleiding. Afvallen, spiermassa opbouwen of meer energie?",
+    url: "https://arnoockerman.vercel.app/aanbod",
+  },
 };
 
 export default function AanbodPage() {
@@ -30,7 +39,7 @@ export default function AanbodPage() {
 
           <div className="grid gap-4 lg:col-span-7">
             <ServiceCard
-              title="1-op-1 Coaching"
+              title="Begeleiding"
               description="Persoonlijke begeleiding met duidelijke afspraken, check-ins en een plan dat je volhoudt."
               highlights={[
                 "Intake + doelbepaling",
@@ -57,7 +66,7 @@ export default function AanbodPage() {
             />
 
             <ServiceCard
-              title="Herbalife Producten"
+              title="Supplementen"
               description="Supplementen en shakes als handige ondersteuning — altijd in functie van je doel."
               highlights={["Eenvoudig inzetten", "Praktisch voor drukke dagen", "Afgestemd op jouw routine"]}
               priceHint={<span>Geen verkooppraat: je krijgt advies op maat en alleen wat je echt nodig hebt.</span>}

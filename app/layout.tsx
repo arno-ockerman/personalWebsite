@@ -20,19 +20,34 @@ const redHat = Red_Hat_Display({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://beinspiredbyus.be"),
+  metadataBase: new URL("https://arnoockerman.vercel.app"),
   title: {
-    default: "Arno Ockerman | Be Inspired By Us",
-    template: "%s | Be Inspired By Us",
+    default: "Arno Ockerman | Fitness Coach voor Ambitieuze Mannen — België",
+    template: "%s | Arno Ockerman",
   },
   description:
-    "Personal branding website van Arno Ockerman. Coaching, voeding en mindset voor ambitieuze mannen — met echte begeleiding en duidelijke stappen.",
+    "Fitness coach voor ambitieuze mannen in België. Afvallen, spiermassa opbouwen en meer energie met persoonlijke begeleiding van Arno Ockerman.",
+  keywords: [
+    "fitness coach België",
+    "fitness coach mannen",
+    "afvallen begeleiding",
+    "hulp bij afvallen",
+    "lifestyle coach online België",
+    "spiermassa opbouwen coach",
+    "voedingscoach België",
+    "afvallen met begeleiding",
+    "body transformatie programma",
+    
+  ],
+  alternates: {
+    canonical: "https://arnoockerman.vercel.app",
+  },
   openGraph: {
-    title: "Arno Ockerman | Be Inspired By Us",
+    title: "Arno Ockerman | Fitness Coach voor Ambitieuze Mannen — België",
     description:
-      "Coaching, voeding en mindset voor ambitieuze mannen. Maak je transformatie concreet met duidelijke stappen.",
-    url: "https://beinspiredbyus.be",
-    siteName: "Be Inspired By Us",
+      "Fitness coach voor ambitieuze mannen in België. Afvallen, spiermassa opbouwen en meer energie met persoonlijke begeleiding.",
+    url: "https://arnoockerman.vercel.app",
+    siteName: "Arno Ockerman — Fitness Coach",
     locale: "nl_BE",
     type: "website",
   },
@@ -50,10 +65,44 @@ export default function RootLayout({
     "@context": "https://schema.org",
     "@type": "Person",
     name: "Arno Ockerman",
-    url: "https://beinspiredbyus.be",
-    jobTitle: "Coach",
-    description: "Coaching, voeding en mindset voor ambitieuze mannen — met echte begeleiding en duidelijke stappen.",
-    sameAs: ["https://instagram.com/arnoockerman", "https://www.we-makeithappen.com"],
+    url: "https://arnoockerman.vercel.app",
+    jobTitle: "Lifestyle Coach",
+    description:
+      "Fitness coach voor ambitieuze mannen in België. Specialisatie in afvallen, spiermassa opbouwen en voedingsbegeleiding.",
+    sameAs: [
+      "https://instagram.com/arnoockerman",
+      "https://www.we-makeithappen.com",
+      
+    ],
+  };
+
+  const websiteSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "Arno Ockerman — Fitness Coach",
+    url: "https://arnoockerman.vercel.app",
+    description: "Fitness coaching voor ambitieuze mannen in België",
+    potentialAction: {
+      "@type": "SearchAction",
+      target: {
+        "@type": "EntryPoint",
+        urlTemplate: "https://arnoockerman.vercel.app/?q={search_term_string}",
+      },
+      "query-input": "required name=search_term_string",
+    },
+  };
+
+  const professionalServiceSchema = {
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    name: "Arno Ockerman Coaching",
+    description:
+      "Fitness coaching, voedingsbegeleiding en mindset coaching voor mannen",
+    areaServed: { "@type": "Country", name: "Belgium" },
+    serviceType: ["Lifestyle Coaching", "Voedingsbegeleiding", "Mindset Coaching"],
+    url: "https://arnoockerman.vercel.app",
+    priceRange: "€€",
+    sameAs: ["https://instagram.com/arnoockerman"],
   };
 
   return (
@@ -71,6 +120,16 @@ gtag('config', '${GA_ID}');`}</Script>
           id="schema-person"
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(personSchema) }}
+        />
+        <Script
+          id="schema-website"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
+        />
+        <Script
+          id="schema-service"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(professionalServiceSchema) }}
         />
 
         <SiteHeader />

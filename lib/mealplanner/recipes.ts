@@ -104,7 +104,7 @@ export const recipes: Recipe[] = [
   },
 
   // ─────────────────────────────────────────
-  // BREAKFAST (Herbalife)
+  // BREAKFAST (Proteïne)
   // ─────────────────────────────────────────
   {
     id: "b-f1-shake-chocolate",
@@ -123,8 +123,8 @@ export const recipes: Recipe[] = [
     suitable_for: ["weight_loss", "muscle", "maintenance"],
     tags: ["vegetarian", "high_protein"],
     allergens: ["lactose", "soy"],
-    herbalife: true,
-    herbalifeProd: "Formula 1 Chocolade",
+    premium: true,
+    premiumProduct: "Proteïneshake Chocolade",
     imageKeyword: "chocolate-protein-shake",
   },
   {
@@ -144,8 +144,8 @@ export const recipes: Recipe[] = [
     suitable_for: ["weight_loss", "muscle", "maintenance"],
     tags: ["vegetarian", "high_protein"],
     allergens: ["lactose", "soy"],
-    herbalife: true,
-    herbalifeProd: "Formula 1 Vanille",
+    premium: true,
+    premiumProduct: "Proteïneshake Vanille",
     imageKeyword: "vanilla-berry-smoothie",
   },
   {
@@ -165,8 +165,8 @@ export const recipes: Recipe[] = [
     suitable_for: ["weight_loss", "muscle", "maintenance"],
     tags: ["vegetarian", "high_protein", "gluten_free"],
     allergens: ["soy"],
-    herbalife: true,
-    herbalifeProd: "Formula 1 Aardbei",
+    premium: true,
+    premiumProduct: "Proteïneshake Aardbei",
     imageKeyword: "strawberry-banana-smoothie",
   },
   {
@@ -187,8 +187,8 @@ export const recipes: Recipe[] = [
     suitable_for: ["weight_loss", "muscle", "maintenance"],
     tags: ["vegetarian", "high_protein", "gluten_free"],
     allergens: ["lactose"],
-    herbalife: true,
-    herbalifeProd: "Herbal Tea Concentrate",
+    premium: true,
+    premiumProduct: "Kruidenthee",
     imageKeyword: "herbal-tea-morning-healthy",
   },
 
@@ -323,7 +323,7 @@ export const recipes: Recipe[] = [
   },
 
   // ─────────────────────────────────────────
-  // LUNCH (Herbalife)
+  // LUNCH (Proteïne)
   // ─────────────────────────────────────────
   {
     id: "l-f1-shake-lunch-cookies",
@@ -342,8 +342,8 @@ export const recipes: Recipe[] = [
     suitable_for: ["weight_loss", "muscle", "maintenance"],
     tags: ["vegetarian", "high_protein"],
     allergens: ["lactose", "soy", "gluten"],
-    herbalife: true,
-    herbalifeProd: "Formula 1 Cookies & Cream",
+    premium: true,
+    premiumProduct: "Proteïneshake Cookies & Cream",
     imageKeyword: "cookies-cream-protein-shake",
   },
   {
@@ -364,8 +364,8 @@ export const recipes: Recipe[] = [
     suitable_for: ["weight_loss", "muscle", "maintenance"],
     tags: ["gluten_free", "lactose_free", "high_protein"],
     allergens: [],
-    herbalife: true,
-    herbalifeProd: "Aloe Vera Concentrate",
+    premium: true,
+    premiumProduct: "Aloë vera drank",
     imageKeyword: "aloe-vera-drink-chicken-bowl",
   },
 
@@ -588,22 +588,22 @@ export const recipes: Recipe[] = [
   },
 
   // ─────────────────────────────────────────
-  // SNACKS (Herbalife)
+  // SNACKS (Proteïne)
   // ─────────────────────────────────────────
   {
-    id: "s-herbalife-protein-bar",
+    id: "s-premium-protein-bar",
     mealType: "snack",
-    name: "Herbalife Protein Bar",
+    name: "Proteïnereep",
     calories: 210,
     protein: 21,
     carbs: 22,
     fat: 6,
-    ingredients: ["1 Herbalife Protein Bar (60g) — Chocolate Chip Cookie Dough"],
+    ingredients: ["1 Proteïnereep (60g) — Chocolate Chip Cookie Dough"],
     suitable_for: ["weight_loss", "muscle", "maintenance"],
     tags: ["vegetarian", "high_protein"],
     allergens: ["gluten", "soy", "nuts"],
-    herbalife: true,
-    herbalifeProd: "Protein Bar",
+    premium: true,
+    premiumProduct: "Proteïnereep",
     imageKeyword: "protein-bar-chocolate",
   },
   {
@@ -622,8 +622,8 @@ export const recipes: Recipe[] = [
     suitable_for: ["weight_loss", "muscle", "maintenance"],
     tags: ["vegan", "vegetarian", "gluten_free", "lactose_free"],
     allergens: [],
-    herbalife: true,
-    herbalifeProd: "Herbal Tea Concentrate",
+    premium: true,
+    premiumProduct: "Kruidenthee",
     imageKeyword: "herbal-tea-rice-cakes",
   },
   {
@@ -643,8 +643,8 @@ export const recipes: Recipe[] = [
     suitable_for: ["weight_loss", "muscle", "maintenance"],
     tags: ["vegan", "vegetarian", "gluten_free", "lactose_free"],
     allergens: [],
-    herbalife: true,
-    herbalifeProd: "Aloe Vera Concentrate",
+    premium: true,
+    premiumProduct: "Aloë vera drank",
     imageKeyword: "aloe-vera-detox-drink",
   },
   {
@@ -663,8 +663,8 @@ export const recipes: Recipe[] = [
     suitable_for: ["weight_loss", "muscle", "maintenance"],
     tags: ["vegetarian", "high_protein", "gluten_free"],
     allergens: ["lactose", "soy"],
-    herbalife: true,
-    herbalifeProd: "Protein Drink Mix",
+    premium: true,
+    premiumProduct: "Eiwitdrank",
     imageKeyword: "vanilla-protein-shake",
   },
 ];

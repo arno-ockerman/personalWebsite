@@ -6,9 +6,18 @@ import { TestimonialCard } from "@/components/TestimonialCard";
 import { Button } from "@/components/Button";
 
 export const metadata: Metadata = {
-  title: "Transformaties",
+  title: "Transformaties & Resultaten | Fitness Coach Arno Ockerman",
   description:
-    "Voor/na transformaties en testimonials van mannen die structuur en resultaat pakten met Arno Ockerman.",
+    "Bekijk echte voor/na transformaties. Mannen die structuur pakten en resultaat boekten met coaching van Arno Ockerman.",
+  alternates: {
+    canonical: "https://arnoockerman.vercel.app/transformaties",
+  },
+  openGraph: {
+    title: "Transformaties & Resultaten | Fitness Coach Arno Ockerman",
+    description:
+      "Bekijk echte voor/na transformaties. Mannen die structuur pakten en resultaat boekten met coaching van Arno Ockerman.",
+    url: "https://arnoockerman.vercel.app/transformaties",
+  },
 };
 
 const transformations = [
