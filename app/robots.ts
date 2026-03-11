@@ -8,7 +8,6 @@ export default function robots(): MetadataRoute.Robots {
         allow: "/",
       },
     ],
-    sitemap: "https://beinspiredbyus.be/sitemap.xml",
+    sitemap: "https://arnoockerman.vercel.app/sitemap.xml",
   };
 }
-

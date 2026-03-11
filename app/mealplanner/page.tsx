@@ -4,13 +4,17 @@ import { Badge } from "@/components/Badge";
 import { MealPlannerFlow } from "@/components/mealplanner/MealPlannerFlow";
 
 export const metadata: Metadata = {
-  title: "Weekmenu Generator | Make It Happen",
+  title: "Gratis Weekmenu Generator | Persoonlijk Voedingsplan",
   description:
-    "Genereer in 2 minuten een persoonlijk weekmenu met boodschappenlijst. Inclusief Herbalife-recepten. Gratis download als PDF na email.",
+    "Genereer in 2 minuten een persoonlijk weekmenu met boodschappenlijst. Inclusief gezonde recepten afgestemd op jouw macro's.",
+  alternates: {
+    canonical: "https://arnoockerman.vercel.app/mealplanner",
+  },
   openGraph: {
-    title: "Gratis Weekmenu Generator — Make It Happen",
-    description: "Persoonlijk weekmenu + boodschappenlijst (PDF). Gratis, geen spam.",
-    url: "https://beinspiredbyus.be/mealplanner",
+    title: "Gratis Weekmenu Generator | Persoonlijk Voedingsplan",
+    description:
+      "Genereer in 2 minuten een persoonlijk weekmenu met boodschappenlijst. Inclusief gezonde recepten afgestemd op jouw macro's.",
+    url: "https://arnoockerman.vercel.app/mealplanner",
   },
 };
 

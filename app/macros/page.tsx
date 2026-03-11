@@ -1,21 +1,63 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Badge } from "@/components/Badge";
 import { Container } from "@/components/Container";
 import { MacroCalculator } from "@/components/macros/MacroCalculator";
 
 export const metadata: Metadata = {
-  title: "Macro Calculator",
-  description: "Bereken jouw dagelijkse calorieën en macro's op basis van je doel, lichaamsdata en activiteit.",
-  openGraph: {
-    title: "Macro Calculator",
-    description: "Bereken jouw dagelijkse calorieën & macros in een paar minuten.",
-    url: "https://beinspiredbyus.be/macros",
+  title: "Gratis Macro Calculator | Bereken je Calorieën & Macro's",
+  description:
+    "Bereken gratis jouw dagelijkse calorieën, eiwitten, koolhydraten en vetten. Persoonlijk berekend op basis van jouw lichaam en doel.",
+  alternates: {
+    canonical: "https://arnoockerman.vercel.app/macros",
   },
+  openGraph: {
+    title: "Gratis Macro Calculator | Bereken je Calorieën & Macro's",
+    description:
+      "Bereken gratis jouw dagelijkse calorieën, eiwitten, koolhydraten en vetten. Persoonlijk berekend op basis van jouw lichaam en doel.",
+    url: "https://arnoockerman.vercel.app/macros",
+  },
+};
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: [
+    {
+      "@type": "Question",
+      name: "Hoeveel calorieën heb ik nodig om af te vallen?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Om af te vallen heb je een calorietekort nodig van 300-500 kcal onder je onderhoudsniveau. Gebruik onze gratis macro calculator om je persoonlijke behoefte te berekenen.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Hoeveel eiwit heb ik nodig voor spiermassa?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Voor spiermassa opbouwen adviseren we 1.6-2.2 gram eiwit per kilogram lichaamsgewicht. Bij 80kg is dat 128-176 gram eiwit per dag.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Wat zijn macro's?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Macro's (macronutriënten) zijn eiwitten, koolhydraten en vetten. Ze vormen de basis van je voeding en bepalen of je afvalt, spiermassa opbouwt of op gewicht blijft.",
+      },
+    },
+  ],
 };
 
 export default function MacrosPage() {
   return (
     <main className="py-10 sm:py-14">
+      <Script
+        id="schema-faq"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
       <Container>
         <div className="grid gap-8 lg:grid-cols-12 lg:items-start">
           <div className="lg:col-span-5">
