@@ -123,10 +123,10 @@ function buildShoppingList(plan: MealPlan): ShoppingListItem[] {
 }
 
 /**
- * Pick which days of the week should feature a Herbalife recipe (1-2 per week).
+ * Pick which days of the week should feature a premium recipe (1-2 per week).
  * We pick 2 pseudo-random day indices out of 7.
  */
-function pickHerbalifeSlots(rand: () => number): Set<number> {
+function pickPremiumSlots(rand: () => number): Set<number> {
   const slots = new Set<number>();
   // First slot — any day
   const first = Math.floor(rand() * 7);
@@ -163,26 +163,26 @@ export function generateMealPlan({
 
   const pool = filterRecipes({ goal, diet: normalizedPrefs.diet, allergies: normalizedPrefs.allergies });
   const byType = (type: MealType) => pool.filter((r) => r.mealType === type);
-  const byTypeHerbalife = (type: MealType) =>
-    pool.filter((r) => r.mealType === type && r.herbalife === true);
+  const byTypePremium = (type: MealType) =>
+    pool.filter((r) => r.mealType === type && r.premium === true);
   const byTypeRegular = (type: MealType) =>
-    pool.filter((r) => r.mealType === type && !r.herbalife);
+    pool.filter((r) => r.mealType === type && !r.premium);
 
   const breakfastPool = byType("breakfast");
   const lunchPool = byType("lunch");
   const dinnerPool = byType("dinner");
   const snackPool = byType("snack");
 
-  const breakfastHerbalife = byTypeHerbalife("breakfast");
-  const snackHerbalife = byTypeHerbalife("snack");
-  const lunchHerbalife = byTypeHerbalife("lunch");
+  const breakfastPremium = byTypePremium("breakfast");
+  const snackPremium = byTypePremium("snack");
+  const lunchPremium = byTypePremium("lunch");
 
   const breakfastRegular = byTypeRegular("breakfast");
   const lunchRegular = byTypeRegular("lunch");
   const snackRegular = byTypeRegular("snack");
 
-  // Determine days where Herbalife gets featured (1-2 per week, naturally)
-  const herbalifeSlots = pickHerbalifeSlots(rand);
+  // Determine days where Premium gets featured (1-2 per week, naturally)
+  const premiumSlots = pickPremiumSlots(rand);
 
   const days: MealPlan["days"] = [];
   const dayKeys: MealPlan["days"][number]["day"][] = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
@@ -206,12 +206,12 @@ export function generateMealPlan({
 
   for (let dayIdx = 0; dayIdx < dayKeys.length; dayIdx++) {
     const day = dayKeys[dayIdx]!;
-    const isHerbalifeDay = herbalifeSlots.has(dayIdx);
+    const isPremiumDay = premiumSlots.has(dayIdx);
 
-    // On Herbalife days: feature an HL breakfast or snack
+    // On premium days: feature a premium breakfast or snack
     let breakfastCandidates = breakfastPool;
-    if (isHerbalifeDay && breakfastHerbalife.length > 0) {
-      breakfastCandidates = breakfastHerbalife;
+    if (isPremiumDay && breakfastPremium.length > 0) {
+      breakfastCandidates = breakfastPremium;
     } else if (breakfastRegular.length > 0) {
       breakfastCandidates = breakfastRegular;
     }
@@ -224,7 +224,7 @@ export function generateMealPlan({
     pushRecent("breakfast", breakfast.id);
 
     const lunchCandidates =
-      !isHerbalifeDay && lunchRegular.length > 0 ? lunchRegular : lunchPool;
+      !isPremiumDay && lunchRegular.length > 0 ? lunchRegular : lunchPool;
     const lunch = pickRecipe({
       pool: shuffle(lunchCandidates, rand),
       rand,
@@ -243,10 +243,10 @@ export function generateMealPlan({
 
     const snacksNeeded = mealsPerDay - 3;
     for (let i = 0; i < snacksNeeded; i++) {
-      // On Herbalife days: try to feature an HL snack for at least 1 slot
+      // On premium days: try to feature a premium snack for at least 1 slot
       let snackCandidates = snackPool;
-      if (isHerbalifeDay && i === 0 && snackHerbalife.length > 0) {
-        snackCandidates = snackHerbalife;
+      if (isPremiumDay && i === 0 && snackPremium.length > 0) {
+        snackCandidates = snackPremium;
       } else if (snackRegular.length > 0) {
         snackCandidates = snackRegular;
       }

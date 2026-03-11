@@ -66,7 +66,7 @@ export default function AanbodPage() {
             />
 
             <ServiceCard
-              title="Herbalife Producten"
+              title="Supplementen"
               description="Supplementen en shakes als handige ondersteuning — altijd in functie van je doel."
               highlights={["Eenvoudig inzetten", "Praktisch voor drukke dagen", "Afgestemd op jouw routine"]}
               priceHint={<span>Geen verkooppraat: je krijgt advies op maat en alleen wat je echt nodig hebt.</span>}

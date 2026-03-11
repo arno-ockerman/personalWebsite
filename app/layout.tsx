@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     "voedingscoach België",
     "afvallen met begeleiding",
     "body transformatie programma",
-    "herbalife coach België",
+    
   ],
   alternates: {
     canonical: "https://arnoockerman.vercel.app",
@@ -72,7 +72,7 @@ export default function RootLayout({
     sameAs: [
       "https://instagram.com/arnoockerman",
       "https://www.we-makeithappen.com",
-      "https://www.herbalife.com",
+      
     ],
   };
 

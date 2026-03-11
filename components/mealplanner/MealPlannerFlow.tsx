@@ -91,8 +91,8 @@ function CookingLoader() {
   );
 }
 
-// ── Herbalife badge ───────────────────────────────────────────────────────────
-function HerbaBadge({ name }: { name: string }) {
+
+function PremiumBadge({ name }: { name: string }) {
   return (
     <span className="inline-flex items-center gap-1 rounded-full bg-brand-primary/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-brand-primary">
       ★ {name}
@@ -131,7 +131,7 @@ function RecipeCard({
           <span className="absolute left-2 top-2 rounded-full bg-black/50 px-2 py-0.5 text-[10px] font-semibold text-white backdrop-blur-sm">
             {mealTypeLabel(mealType)}
           </span>
-          {recipe.herbalife && (
+          {recipe.premium && (
             <span className="absolute right-2 top-2 rounded-full bg-brand-primary px-2 py-0.5 text-[10px] font-bold text-white">
               ★ HL
             </span>
@@ -147,9 +147,9 @@ function RecipeCard({
         )}
         <p className="font-semibold leading-snug text-black/80">{recipe.name}</p>
 
-        {recipe.herbalife && recipe.herbalifeProd && (
+        {recipe.premium && recipe.premiumProduct && (
           <div className="mt-1">
-            <HerbaBadge name={recipe.herbalifeProd} />
+            <PremiumBadge name={recipe.premiumProduct} />
           </div>
         )}
 
@@ -304,8 +304,8 @@ export function MealPlannerFlow() {
     window.open(url, "_blank", "noopener,noreferrer");
   }
 
-  const herbalifeCount = plan
-    ? plan.days.flatMap((d) => d.meals).filter((m) => m.recipe.herbalife).length
+  const premiumCount = plan
+    ? plan.days.flatMap((d) => d.meals).filter((m) => m.recipe.premium).length
     : 0;
 
   return (
@@ -646,16 +646,16 @@ export function MealPlannerFlow() {
               ))}
             </div>
 
-            {/* Herbalife note */}
-            {herbalifeCount > 0 && (
+            {/* Premium note */}
+            {premiumCount > 0 && (
               <div className="mt-4 flex items-start gap-3 rounded-2xl border border-brand-primary/15 bg-brand-primary/5 p-4">
                 <span className="text-xl">🌿</span>
                 <div>
                   <p className="text-sm font-semibold text-brand-primary">
-                    {herbalifeCount} Herbalife recepten in jouw plan
+                    {premiumCount} Proteïnerecepten in jouw plan
                   </p>
                   <p className="mt-0.5 text-xs text-black/60">
-                    Gemarkeerd met ★ — handig om te bestellen bij je Herbalife coach. Vragen?{" "}
+                    Gemarkeerd met ★. Vragen?{" "}
                     <a href="/contact" className="font-semibold underline">
                       Neem contact op
                     </a>

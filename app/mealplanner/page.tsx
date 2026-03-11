@@ -25,7 +25,7 @@ const testimonials = [
     context: "Doel: Afvallen",
   },
   {
-    quote: "De Herbalife shakes passen perfect in mijn dagelijkse routine. Super makkelijk!",
+    quote: "De proteïneshakes passen perfect in mijn dagelijkse routine. Super makkelijk!",
     name: "Thomas K.",
     context: "Doel: Spieropbouw",
   },
@@ -49,7 +49,7 @@ export default function MealPlannerPage() {
             </h1>
             <p className="mt-5 max-w-xl text-base leading-relaxed text-black/70 sm:text-lg">
               Kies je doel, geef je voorkeuren door en ontvang een concreet menu (Ma–Zo) met boodschappenlijst.
-              Download als PDF — inclusief Herbalife-recepten op maat.
+              Download als PDF — inclusief recepten op maat.
             </p>
 
             {/* Stats grid */}
@@ -74,7 +74,7 @@ export default function MealPlannerPage() {
                 <li>• Weekmenu (Ma–Zo) op basis van je doel</li>
                 <li>• Macros per dag + weektotaal</li>
                 <li>• Boodschappenlijst (geaggregeerd)</li>
-                <li>• 🌿 Herbalife-recepten geïntegreerd in je plan</li>
+                <li>• 🌿 Proteïnerecepten geïntegreerd in je plan</li>
                 <li>• Branded PDF export (3 pagina&apos;s)</li>
               </ul>
               <p className="mt-4 text-xs text-black/60">
@@ -82,13 +82,13 @@ export default function MealPlannerPage() {
               </p>
             </div>
 
-            {/* Herbalife note */}
+            {/* Protein note */}
             <div className="mt-5 flex items-start gap-3 rounded-3xl border border-brand-primary/10 bg-brand-primary/5 p-4">
               <span className="text-2xl">🌿</span>
               <div>
-                <p className="text-sm font-semibold text-brand-primary">Powered by Herbalife Nutrition</p>
+                <p className="text-sm font-semibold text-brand-primary">Proteïnerijke opties</p>
                 <p className="mt-1 text-xs text-black/60">
-                  Je plan bevat 1–2 Herbalife-recepten als handige, smakelijke optie. Niet verplicht — altijd een
+                  Je plan bevat 1–2 proteïnerecepten als handige, smakelijke optie. Niet verplicht — altijd een
                   gewoon alternatief beschikbaar.
                 </p>
               </div>
