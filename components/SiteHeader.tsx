@@ -12,8 +12,12 @@ const links = [
   { href: "/transformaties", label: "Transformaties" },
   { href: "/mealplanner", label: "Weekmenu" },
   { href: "/macros", label: "Macros" },
+  { href: "/kickstart", label: "Kickstart Gids" },
   { href: "/contact", label: "Contact" },
 ];
+
+/** Links with a special "gratis" highlight badge in the desktop nav */
+const FREE_HREFS = new Set(["/kickstart"]);
 
 export function SiteHeader() {
   const pathname = usePathname();
@@ -26,6 +30,7 @@ export function SiteHeader() {
     if (pathname.startsWith("/transformaties")) return "/transformaties";
     if (pathname.startsWith("/mealplanner")) return "/mealplanner";
     if (pathname.startsWith("/macros")) return "/macros";
+    if (pathname.startsWith("/kickstart")) return "/kickstart";
     if (pathname.startsWith("/contact")) return "/contact";
     return "/";
   }, [pathname]);
@@ -45,15 +50,21 @@ export function SiteHeader() {
           <nav className="hidden items-center gap-7 sm:flex" aria-label="Primary">
             {links.map((l) => {
               const active = l.href === activeHref;
+              const isFree = FREE_HREFS.has(l.href);
               return (
                 <Link
                   key={l.href}
                   href={l.href}
-                  className={`text-sm font-semibold transition ${
+                  className={`relative text-sm font-semibold transition ${
                     active ? "text-brand-primary" : "text-black/70 hover:text-black"
                   }`}
                 >
                   {l.label}
+                  {isFree && (
+                    <span className="ml-1.5 rounded-full bg-brand-primary/15 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-brand-primary">
+                      gratis
+                    </span>
+                  )}
                 </Link>
               );
             })}
@@ -83,18 +94,24 @@ export function SiteHeader() {
             <nav className="flex flex-col gap-2 py-4" aria-label="Mobile">
               {links.map((l) => {
                 const active = l.href === activeHref;
+                const isFree = FREE_HREFS.has(l.href);
                 return (
                   <Link
                     key={l.href}
                     href={l.href}
                     onClick={() => setOpen(false)}
-                    className={`rounded-2xl px-4 py-3 text-sm font-semibold transition ${
+                    className={`flex items-center justify-between rounded-2xl px-4 py-3 text-sm font-semibold transition ${
                       active
                         ? "bg-brand-primary/5 text-brand-primary"
                         : "text-black/70 hover:bg-black/5 hover:text-black"
                     }`}
                   >
                     {l.label}
+                    {isFree && (
+                      <span className="rounded-full bg-brand-primary/15 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-brand-primary">
+                        gratis
+                      </span>
+                    )}
                   </Link>
                 );
               })}
